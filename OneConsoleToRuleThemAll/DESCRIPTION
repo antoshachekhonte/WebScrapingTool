@@ -1,0 +1,26 @@
+Package: OneConsoleToRuleThemAll
+Title: For those looking to know which console has the best videogames!
+Version: 0.0.0.1
+Authors@R: person("Nikhil", "Raman", email = "nr2409@columbia.edu", role = c("aut", "cre"))
+Description: Ever wondered which video game platform has the best games? While some gamers purchase consoles based solely on the console specs, other, wiser gamers, additionally bear in mind the which console has the best titles under its belt. This package collects information on the top 100 games by platform from Metacritic, the review aggregator website, and provides the user with some basic summary statistics. The user may also use this package to gather summary descriptions of the top 3 games by console for more information. 
+Depends: R (>= 3.4.2)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    magrittr,
+    stringr,
+    rvest,
+    httr,
+    xml2,
+    ggplot2,
+    grid,
+    gridExtra,
+    data.table,
+    DT
+RoxygenNote: 6.0.1.9000
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

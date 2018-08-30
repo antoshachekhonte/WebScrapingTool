@@ -1,0 +1,138 @@
+---
+title: "OneConsoleToRuleThemAll"
+author: "Nikhil Raman"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{OneConsoleToRuleThemAll}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+	collapse = TRUE,
+	comment = "#>",
+	include = TRUE
+)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# Loading required packages...
+library(magrittr)
+library(dplyr)
+library(stringr)
+library(DT)
+library(rvest)
+library(httr)
+library(xml2)
+library(data.table)
+library(gridExtra)
+library(grid)
+library(ggplot2)
+library(OneConsoleToRuleThemAll)
+```
+
+# Introduction
+
+This document has been written to provide users with an overview of the the usage of the package OnePlatformToRuleThemAll. The package is designed to scrape data on the top 100 games on metacritic by console and timeframe as specified by user (here's a sample link: http://www.metacritic.com/browse/games/score/metascore/all/all/filtered), provide the user with the raw data, summary statistics and visualizations, and brief descriptions of the top three games by console and timeframe - by navigating to the metacritic page of the individual games (here's a sample link: http://www.metacritic.com/game/xbox-one/grand-theft-auto-v). 
+
+## The following are the functions included in the package with a brief description of their individual utilities:  
+
+**readResponse** This function prompts for and accepts user input    
+
+**buildUrl.** This function simply builds a metacritic website url as per user input    
+
+**scraper** This function is designed to scrape information from the metacritic top 100 games page. It reorganizes the data and returns a formatted dataframe.  
+
+**OnePlatformToRuleThemAll** This function invokes scraper to get game data for the most popular consoles, and returns a list of dataframes, including one with summary statistics and four with the exclusive games by console.  
+
+**visualization** This function returns histograms of the ratings of the exclusive games by console.  
+
+**topgamesummary** This function accepts a metacritic top games list url from the user and returns brief descriptions of the top 3 games in the list by navigating from the to the unique pages of the games and scraping information from there.   
+
+Functions **scraper** and **topgamesummary** can be called with function **buildUrl** as an argument, so the user can specify the console and timeframe of the metacritic table.  
+
+The following is the base url used by the functions. The page can be viewed so the user can gain an idea of the table and contents being scraped: http://www.metacritic.com/browse/games/score/metascore/all/all/filtered  
+
+## Example 1
+
+In the following example, we shall use the **scraper** function to extract a dataframe from the metacritic top games (across all platforms) table.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+df <- scraper()
+datatable(head(df))
+```
+
+## Example 2
+
+In the following example, we wish to simply generate a dataframe with console game summary statistics using the **OnePlatformToRuleThemAll** function. The function returns a list of dataframes, the first of which is a dataframe with summary statistics for each console, and the remaining 3 of which are dataframes with of exclusive games by consule.  
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+summarystatistics <- OnePlatformToRuleThemAll()
+datatable(summarystatistics[1][[1]])
+```
+
+## Example 3
+
+In the following example, we shall invoke the **visualization** function to build historgrams of the data. 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+visualization()
+```
+
+## Example 4
+
+The following example invokes the **topgamesummary** function to construct a dataframe of the top 3 games and their brief descriptions. It then displays the summaries collected.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+game.summary <- topgamesummary()
+cat("Best Game:",game.summary$name[1],"\nSummary:",strtrim(game.summary$summary[2],700),"...\n\n")
+cat("Second Best Game:",game.summary$name[2],"\nSummary:",strtrim(game.summary$summary[2],700),"...\n\n")
+cat("Third Best Game:",game.summary$name[3],"\nSummary:",strtrim(game.summary$summary[3],700),"...")
+```
+
+## Data
+
+**crossplatformtopgames**: This dataset contains the scraped data from the top games table in the page http://www.metacritic.com/browse/games/score/metascore/90day/all/filtered?sort=desc 
+
+```{r}
+datatable(crossplatformtopgames)
+```
+
+**summarystats**: This dataset contains summary statistics of games by platform.
+
+```{r}
+datatable(summarystats)
+```
+
+
+**gamesummary**: This dataset contains a brief summary of the top 3 ps4 games. A similar dataset can be generated for any of the other platforms by calling the topgamesummary() function with buildUrl() function passed as an argument.
+
+```{r}
+datatable(gamesummary)
+```
+
+**pcexclusives**: This is a dataset of the top exclusive pc games. 
+
+```{r}
+datatable(pcexclusives)
+```
+
+**ps4exclusives**: This is a dataset of the top exclusive ps4 games.
+
+```{r}
+datatable(ps4exclusives)
+```
+
+**xboxoneexclusives**: This is a dataset of the top xbox one exclusive games.
+
+```{r}
+datatable(xboxoneexclusives)
+```
+
+**switchexclusives**: This is a dataset of the top switch exclusive games.
+
+```{r}
+datatable(switchexclusives)
+```
+
